@@ -1,0 +1,319 @@
+<!-- livebook:{"file_entries":[{"name":"HDBCarparkInformation.csv","type":"attachment"}]} -->
+
+# Car Parking Problem
+
+```elixir
+Mix.install([{:nimble_csv, "~> 1.2"}])
+```
+
+## Section
+
+```elixir
+NimbleCSV.define(MyParser, separator: ",", escape: "\"")
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+{:module, MyParser, <<70, 79, 82, 49, 0, 0, 61, ...>>, :ok}
+```
+
+```elixir
+{:ok, csv_content} = "/home/livebook/.local/share/livebook/autosaved/2025_04_08/01_42_4vfu/files/HDBCarparkInformation.csv"
+|> File.read()
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+{:ok,
+ "car_park_no,address,x_coord,y_coord,car_park_type,type_of_parking_system,short_term_parking,free_parking,night_parking,car_park_decks,gantry_height,car_park_basement\nACB,BLK 270/271 ALBERT CENTRE BASEMENT CAR PARK,30314.7936,31490.4942,BASEMENT CAR PARK,ELECTRONIC PARKING,WHOLE DAY,NO,YES,1,1.8,Y\nACM,BLK 98A ALJUNIED CRESCENT,33758.4143,33695.5198,MULTI-STOREY CAR PARK,ELECTRONIC PARKING,WHOLE DAY,SUN & PH FR 7AM-10.30PM,YES,5,2.1,N\nAH1,BLK 101 JALAN DUSUN,29257.7203,34500.3599,SURFACE CAR PARK,ELECTRONIC PARKING,WHOLE DAY,SUN & PH FR 7AM-10.30PM,YES,0,0,N\nAK19,BLOCK 253 ANG MO KIO STREET 21,28185.4359,39012.6664,SURFACE CAR PARK,COUPON PARKING,7AM-7PM,NO,NO,0,0,N\nAK31,BLK 302/348 ANG MO KIO STREET 31,29482.029,38684.1754,SURFACE CAR PARK,COUPON PARKING,NO,NO,NO,0,0,N\nAK52,BLK 513 ANG MO KIO STREET 53,29889.3457,39382.8134,SURFACE CAR PARK,COUPON PARKING,WHOLE DAY,NO,YES,0,0,N\nAK83,BLK 5022 TO 5095 ANG MO KIO INDUSTRIAL PARK 2,31397.2241,39851.6191,SURFACE CAR PARK,COUPON PARKING,NO,NO,NO,0,0,N\nAK9,ANG MO KIO AVENUE 9,29674.8184,40616.875,SURFACE CAR PARK,COUPON PARKING,NO,NO,NO,0,0,N\nAM14,BLK 227 ANG MO KIO STREET 23,28777.0707,38973.9528,MULTI-STOREY CAR PARK,ELECTRONIC PARKING,WHOLE DAY,NO,YES,6,2.15,N\nAM16,BLK 256A ANG MO KIO STREET 21,28267.0582,39151.8344,MULTI-STOREY CAR PARK,ELECTRONIC PARKING,WHOLE DAY,SUN & PH FR 7AM-10.30PM,YES,2,2.15,N\nAM18,BLK 308C ANG MO KIO AVENUE 1,29257.6457,38619.9953,MULTI-STOREY CAR PARK,ELECTRONIC PARKING,7AM-10.30PM,NO,NO,3,2.15,N\nAM19,BLK 260 ANG MO KIO STREET 21,28134.9305,38989.9965,MULTI-STOREY CAR PARK,ELECTRONIC PARKING,WHOLE DAY,SUN & PH FR 7AM-10.30PM,YES,6,2.15,N\nAM20,BLK 309B ANG MO KIO STREET 31,29421.1502,38526.8611,MULTI-STOREY CAR PARK,ELECTRONIC PARKING,WHOLE DAY,SUN & PH FR 7AM-10.30PM,YES,12,2.15,N\nAM22,BLK 316B ANG MO KIO STREET 31,29595.2539,38514.7606,MULTI-STOREY CAR PARK,ELECTRONIC PARKING,WHOLE DAY,SUN & PH FR 7AM-10.30PM,YES,12,2.15,N\nAM32,BLK 255A ANG MO KIO STREET 21,28117.7689,39172.0389,MULTI-STOREY CAR PARK,ELECTRONIC PARKING,WHOLE DAY,NO,YES,2,2.15,N\nAM43,BLK 455 ANG MO KIO STREET 44,30669.2379,38959.5487,MULTI-STOREY CAR PARK,ELECTRONIC PARKING,WHOLE DAY,SUN & PH FR 7AM-10.30PM,YES,7,2.15,N\nAM46,BLK 588 ANG MO KIO STREET 52,30234.4145,39354.0323,MULTI-STOREY CAR PARK,ELECTRONIC PARKING,WHOLE DAY,NO,YES,5,2.15,N\nAM51,BLK 700 ANG MO KIO AVENUE 6,29489.025,39103.7605,MULTI-STOREY CAR PARK,ELECTRONIC PARKING,WHOLE DAY,SUN & PH FR 7AM-10.30PM,YES,12,2.15,N\nAM64,BLK 590 ANG MO KIO STREET 51,30201.236,39274.274,MULTI-STOREY CAR PARK,ELECTRONIC PARKING,WHOLE DAY,SUN & PH FR 7AM-10.30PM,YES,12,2.15,N\nAM79,BLK 596 ANG MO KIO STREET 52,30004.2224,39370.6063,MULTI-STOREY CAR PARK,ELECTRONIC PARKING,WHOLE DAY,SUN & PH FR 7AM-10.30PM,YES,12,2.15,N\nAM80,BLK 130A ANG MO KIO STREET 12,28950.7223,39184.6976,MULTI-STOREY CAR PARK,ELECTRONIC PARKING,WHOLE DAY,SUN & PH FR 7AM-10.30PM,YES,4,2.15,N\nAM81,BLK 132A ANG MO KIO STREET 12,28960.3285,39294.4158,MULTI-STOREY CAR PARK,ELECTRONIC PARKING,WHOLE DAY,SUN & PH FR 7AM-10.30PM,YES,4,2.15,N\nAM96,BLK 352A ANG MO KIO STREET 32,29961.0968,38457.9118,MULTI-STOREY CAR PARK,ELECTRONIC PARKING,WHOLE DAY,SUN & PH FR 7AM-10.30PM,YES,12,2.15,N\nAR1L,3 AND 5 DOVER ROAD,22359.0217,31801.6379,SURFACE CAR PARK,ELECTRONIC PARKING,NO,NO,NO,0,4.5,N\nAR1M,BLK 2A DOVER ROAD,22474.205,31687.9608,MULTI-STOREY CAR PARK,ELECTRONIC PARKING,WHOLE DAY,SUN & PH FR 7AM-10.30PM,YES,10,2.15,N\nAR2L,BLK 26 AND 27 DOVER CRESCENT,22194.6359,32026.8288,SURFACE CAR PARK,ELECTRONIC PARKING,NO,NO,NO,0,0,N\nAR2M,BLK 28 DOVER CRESCENT,22252.486,31896.9749,MULTI-STOREY CAR PARK,ELECTRONIC PARKING,WHOLE DAY,SUN & PH FR 7AM-10.30PM,YES,16,2.15,N\nAR5M,BLK 19A DOVER CRESCENT,22562.8641,32184.9758,MULTI-STOREY CAR PARK,ELECTRONIC PARKING,WHOLE DAY,SUN & PH FR 7AM-10.30PM,YES,12,2.15,N\nAR7L,12 TO 14 DOVER CLOSE EAST,22688.3753,32015.1518,SURFACE CAR PARK,ELECTRONIC PARKING,NO,NO,NO,0,0,N\nAR7M,BLK 12A DOVER CLOSE EAST,22643.9533,31900.5591,MULTI-STOREY CAR PARK,ELECTRONIC PARKING,WHOLE DAY,SUN & PH FR 7AM-10.30PM,YES,7,2.15,N\nAR9,BLK 20/22/23 DOVER CRESCENT,22448.9368,32178." <> ...}
+```
+
+```elixir
+csv_content
+|> MyParser.parse_string()
+|> Enum.map(fn [car_park_no, address, x_coord, y_coord | _] ->
+  %{car_park_no: car_park_no, address: address, x_coord: x_coord, y_coord: y_coord}
+
+  
+end)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+[
+  %{
+    address: "BLK 270/271 ALBERT CENTRE BASEMENT CAR PARK",
+    car_park_no: "ACB",
+    x_coord: "30314.7936",
+    y_coord: "31490.4942"
+  },
+  %{
+    address: "BLK 98A ALJUNIED CRESCENT",
+    car_park_no: "ACM",
+    x_coord: "33758.4143",
+    y_coord: "33695.5198"
+  },
+  %{
+    address: "BLK 101 JALAN DUSUN",
+    car_park_no: "AH1",
+    x_coord: "29257.7203",
+    y_coord: "34500.3599"
+  },
+  %{
+    address: "BLOCK 253 ANG MO KIO STREET 21",
+    car_park_no: "AK19",
+    x_coord: "28185.4359",
+    y_coord: "39012.6664"
+  },
+  %{
+    address: "BLK 302/348 ANG MO KIO STREET 31",
+    car_park_no: "AK31",
+    x_coord: "29482.029",
+    y_coord: "38684.1754"
+  },
+  %{
+    address: "BLK 513 ANG MO KIO STREET 53",
+    car_park_no: "AK52",
+    x_coord: "29889.3457",
+    y_coord: "39382.8134"
+  },
+  %{
+    address: "BLK 5022 TO 5095 ANG MO KIO INDUSTRIAL PARK 2",
+    car_park_no: "AK83",
+    x_coord: "31397.2241",
+    y_coord: "39851.6191"
+  },
+  %{address: "ANG MO KIO AVENUE 9", car_park_no: "AK9", x_coord: "29674.8184", y_coord: "40616.875"},
+  %{
+    address: "BLK 227 ANG MO KIO STREET 23",
+    car_park_no: "AM14",
+    x_coord: "28777.0707",
+    y_coord: "38973.9528"
+  },
+  %{
+    address: "BLK 256A ANG MO KIO STREET 21",
+    car_park_no: "AM16",
+    x_coord: "28267.0582",
+    y_coord: "39151.8344"
+  },
+  %{
+    address: "BLK 308C ANG MO KIO AVENUE 1",
+    car_park_no: "AM18",
+    x_coord: "29257.6457",
+    y_coord: "38619.9953"
+  },
+  %{
+    address: "BLK 260 ANG MO KIO STREET 21",
+    car_park_no: "AM19",
+    x_coord: "28134.9305",
+    y_coord: "38989.9965"
+  },
+  %{
+    address: "BLK 309B ANG MO KIO STREET 31",
+    car_park_no: "AM20",
+    x_coord: "29421.1502",
+    y_coord: "38526.8611"
+  },
+  %{
+    address: "BLK 316B ANG MO KIO STREET 31",
+    car_park_no: "AM22",
+    x_coord: "29595.2539",
+    y_coord: "38514.7606"
+  },
+  %{
+    address: "BLK 255A ANG MO KIO STREET 21",
+    car_park_no: "AM32",
+    x_coord: "28117.7689",
+    y_coord: "39172.0389"
+  },
+  %{
+    address: "BLK 455 ANG MO KIO STREET 44",
+    car_park_no: "AM43",
+    x_coord: "30669.2379",
+    y_coord: "38959.5487"
+  },
+  %{
+    address: "BLK 588 ANG MO KIO STREET 52",
+    car_park_no: "AM46",
+    x_coord: "30234.4145",
+    y_coord: "39354.0323"
+  },
+  %{
+    address: "BLK 700 ANG MO KIO AVENUE 6",
+    car_park_no: "AM51",
+    x_coord: "29489.025",
+    y_coord: "39103.7605"
+  },
+  %{
+    address: "BLK 590 ANG MO KIO STREET 51",
+    car_park_no: "AM64",
+    x_coord: "30201.236",
+    y_coord: "39274.274"
+  },
+  %{
+    address: "BLK 596 ANG MO KIO STREET 52",
+    car_park_no: "AM79",
+    x_coord: "30004.2224",
+    y_coord: "39370.6063"
+  },
+  %{
+    address: "BLK 130A ANG MO KIO STREET 12",
+    car_park_no: "AM80",
+    x_coord: "28950.7223",
+    y_coord: "39184.6976"
+  },
+  %{
+    address: "BLK 132A ANG MO KIO STREET 12",
+    car_park_no: "AM81",
+    x_coord: "28960.3285",
+    y_coord: "39294.4158"
+  },
+  %{
+    address: "BLK 352A ANG MO KIO STREET 32",
+    car_park_no: "AM96",
+    x_coord: "29961.0968",
+    y_coord: "38457.9118"
+  },
+  %{
+    address: "3 AND 5 DOVER ROAD",
+    car_park_no: "AR1L",
+    x_coord: "22359.0217",
+    y_coord: "31801.6379"
+  },
+  %{address: "BLK 2A DOVER ROAD", car_park_no: "AR1M", x_coord: "22474.205", y_coord: "31687.9608"},
+  %{
+    address: "BLK 26 AND 27 DOVER CRESCENT",
+    car_park_no: "AR2L",
+    x_coord: "22194.6359",
+    y_coord: "32026.8288"
+  },
+  %{
+    address: "BLK 28 DOVER CRESCENT",
+    car_park_no: "AR2M",
+    x_coord: "22252.486",
+    y_coord: "31896.9749"
+  },
+  %{
+    address: "BLK 19A DOVER CRESCENT",
+    car_park_no: "AR5M",
+    x_coord: "22562.8641",
+    y_coord: "32184.9758"
+  },
+  %{
+    address: "12 TO 14 DOVER CLOSE EAST",
+    car_park_no: "AR7L",
+    x_coord: "22688.3753",
+    y_coord: "32015.1518"
+  },
+  %{
+    address: "BLK 12A DOVER CLOSE EAST",
+    car_park_no: "AR7M",
+    x_coord: "22643.9533",
+    y_coord: "31900.5591"
+  },
+  %{
+    address: "BLK 20/22/23 DOVER CRESCENT",
+    car_park_no: "AR9",
+    x_coord: "22448.9368",
+    y_coord: "32178.436"
+  },
+  %{
+    address: "BLK 120/120A/121-127 ALEXANDRA VILLAGE",
+    car_park_no: "AV1",
+    x_coord: "24649.752",
+    y_coord: "29778.7266"
+  },
+  %{
+    address: "BLK 1001/1010 BUKIT MERAH LANE 1/3",
+    car_park_no: "AV2",
+    x_coord: "24941.5778",
+    y_coord: "29704.4978"
+  },
+  %{
+    address: "BLK 215 ANG MO KIO STREET 22",
+    car_park_no: "A1",
+    x_coord: "28934.1777",
+    y_coord: "38749.8516"
+  },
+  %{
+    address: "BLK 201/202 ANG MO KIO STREET 22",
+    car_park_no: "A10",
+    x_coord: "29247.03",
+    y_coord: "38962"
+  },
+  %{
+    address: "BLK 650 ANG MO KIO STREET 61",
+    car_park_no: "A100",
+    x_coord: "29033.1895",
+    y_coord: "39996.3712"
+  },
+  %{
+    address: "BLK 651 ANG MO KIO AVENUE 9",
+    car_park_no: "A101",
+    x_coord: "28937.1415",
+    y_coord: "40554.9338"
+  },
+  %{
+    address: "BLK 223/226/226A-226D ANG MO KIO STREET 22",
+    car_park_no: "A11",
+    x_coord: "28541.14",
+    y_coord: "38785.36"
+  },
+  %{
+    address: "BLK 229/230 ANG MO KIO STREET 22",
+    car_park_no: "A12",
+    x_coord: "28605.489",
+    y_coord: "38954.8"
+  },
+  %{
+    address: "BLK 232/233 ANG MO KIO STREET 22",
+    car_park_no: "A13",
+    x_coord: "28388.51",
+    y_coord: "38892.03"
+  },
+  %{
+    address: "BLK 226E-226H ANG MO KIO STREET 22",
+    car_park_no: "A15",
+    x_coord: "28790.02",
+    y_coord: "38777.85"
+  },
+  %{
+    address: "BLK 206/207 ANG MO KIO STREET 22",
+    car_park_no: "A2",
+    x_coord: "29082.59",
+    y_coord: "38697.07"
+  },
+  %{
+    address: "BLK 304/307/319 ANG MO KIO STREET 31",
+    car_park_no: "A20",
+    x_coord: "29684.7366",
+    y_coord: "38554.0251"
+  },
+  %{
+    address: "BLK 325/326/301 ANG MO KIO STREET 31",
+    car_park_no: "A21",
+    x_coord: "29446.1477",
+    y_coord: "38906.1139"
+  },
+  %{
+    address: "BLK 347A ANG MO KIO AVENUE 3",
+    car_park_no: "A23",
+    x_coord: "29735.5099",
+    y_coord: "38818.5301"
+  },
+  %{
+    address: "BLK 338/340 ANG MO KIO STREET 32",
+    car_park_no: "A24",
+    x_coord: "29789.41",
+    y_coord: "38533.02"
+  },
+  %{address: "BLK 330/337 ANG MO KIO AVENUE 8", car_park_no: "A25", x_coord: "30037.566", ...},
+  %{address: "BLK 113/114/118 ANG MO KIO AVENUE 4", car_park_no: "A26", ...},
+  %{address: "BLK 108/109/110 ANG MO KIO STREET 11", ...},
+  %{...},
+  ...
+]
+```

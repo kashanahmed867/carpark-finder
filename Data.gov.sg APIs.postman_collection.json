@@ -1,0 +1,139 @@
+{
+	"info": {
+		"_postman_id": "722315e6-7f32-44e6-9ae9-273faeeae944",
+		"name": "Data.gov.sg APIs",
+		"description": "\"APIs for People\"",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27204126"
+	},
+	"item": [
+		{
+			"name": "transport",
+			"item": [
+				{
+					"name": "carpark-availability",
+					"item": [
+						{
+							"name": "Get the latest carpark availability in Singapore",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/transport/carpark-availability?date_time=2025-04-09T12:00:00",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"transport",
+										"carpark-availability"
+									],
+									"query": [
+										{
+											"key": "date_time",
+											"value": "2025-04-09T12:00:00",
+											"description": "YYYY-MM-DD[T]HH:mm:ss (SGT)"
+										}
+									]
+								},
+								"description": "- Retrieved every minute\n- Use the date_time parameter to retrieve the latest carpark availability at that moment in time\n- Detailed carpark information can be found at https://data.gov.sg/dataset/hdb-carpark-information\n- We recommend that this endpoint be called every minute\n"
+							},
+							"response": [
+								{
+									"name": "Carpark availability",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/transport/carpark-availability?date_time=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"transport",
+												"carpark-availability"
+											],
+											"query": [
+												{
+													"key": "date_time",
+													"value": "<string>",
+													"description": "YYYY-MM-DD[T]HH:mm:ss (SGT)"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"api_info\": {\n    \"status\": \"healthy\"\n  },\n  \"items\": [\n    {\n      \"timestamp\": \"<dateTime>\",\n      \"carpark_data\": [\n        {\n          \"total_lots\": \"<string>\",\n          \"lot_type\": \"<string>\",\n          \"lots_available\": \"<string>\"\n        },\n        {\n          \"total_lots\": \"<string>\",\n          \"lot_type\": \"<string>\",\n          \"lots_available\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"timestamp\": \"<dateTime>\",\n      \"carpark_data\": [\n        {\n          \"total_lots\": \"<string>\",\n          \"lot_type\": \"<string>\",\n          \"lots_available\": \"<string>\"\n        },\n        {\n          \"total_lots\": \"<string>\",\n          \"lot_type\": \"<string>\",\n          \"lots_available\": \"<string>\"\n        }\n      ]\n    }\n  ]\n}"
+								},
+								{
+									"name": "Error information",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/transport/carpark-availability?date_time=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"transport",
+												"carpark-availability"
+											],
+											"query": [
+												{
+													"key": "date_time",
+													"value": "<string>",
+													"description": "YYYY-MM-DD[T]HH:mm:ss (SGT)"
+												}
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"code\": \"<integer>\",\n  \"message\": \"<string>\"\n}"
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://api.data.gov.sg/v1"
+		}
+	]
+}
